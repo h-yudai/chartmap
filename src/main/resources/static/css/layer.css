@@ -1,0 +1,40 @@
+/* レイヤ設定画面 */
+.layer_setting_tbl {
+	width: 100%;
+}
+.layer_setting_tbl input {
+	width: 90%;
+}
+/* レイヤ設定画面 タブ切り替え */
+.tab-group {
+	display: flex;
+	justify-content: center;
+	padding-inline-start: 0;
+	margin: 0;
+}
+.tab {
+	flex-grow: 1;
+	padding: 2px;
+	list-style: none;
+	border: solid 1px #CCC;
+	text-align: center;
+	cursor: pointer;
+}
+.panel-group {
+/* 	height: 240px; */
+	border: solid 1px #CCC;
+	border-top: none;
+	background: #eee;
+}
+.panel {
+	display: none;
+	padding: 2px;
+}
+.tab.is-active {
+	background: rgba(0,60,136,.5);
+	color: #FFF;
+	transition: all 0.2s ease-out;
+}
+.panel.is-show {
+	display: block;
+}

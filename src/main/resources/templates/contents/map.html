@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>ChartMap</title>
+	<!-- jQuery -->
+	<script src="/lib/jquery/3.4.1/jquery-3.4.1.min.js"></script>
+	<!-- jQuery UI -->
+	<!--
+	<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+	-->
+	<link href="/lib/jquery-ui/1.12.1/jquery-ui.min.css" rel="stylesheet"></link>
+	<script src="/lib/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+	<!-- jsTree -->
+	<link href="/lib/jstree/3.3.9/dist/themes/default/style.min.css" rel="stylesheet"></link>
+	<script src="/lib/jstree/3.3.9/dist/jstree.min.js"></script>
+	<!-- jsGrid -->
+	<link href="/lib/jsgrid/1.5.3/dist/jsgrid.min.css" rel="stylesheet"></link>
+	<link href="/lib/jsgrid/1.5.3/dist/jsgrid-theme.min.css" rel="stylesheet"></link>
+	<script src="/lib/jsgrid/1.5.3/dist/jsgrid.min.js"></script>
+	<!-- OpenLayers -->
+	<link href="/lib/openlayers/6.2.1/ol.css" rel="stylesheet"></link>
+	<script src="/lib/openlayers/6.2.1/ol.js"></script>
+	<!-- Chart.js -->
+	<link href="/lib/chart/2.9.3/dist/Chart.css" rel="stylesheet"></link>
+	<script src="/lib/chart/2.9.3/dist/Chart.js"></script>
+	<!-- ChartMap -->
+	<link href="/css/map.css" rel="stylesheet"></link>
+	<link href="/css/layer.css" rel="stylesheet"></link>
+	<link href="/css/chart.css" rel="stylesheet"></link>
+	<script src="/js/map.js"></script>
+	<script src="/js/layer.js"></script>
+	<script src="/js/layer-setting.js"></script>
+	<script src="/js/chart-setting.js"></script>
+</head>
+<body>
+	<div id="map"></div>
+	<button type="button" id="drawer_menu_btn">
+		<img id="drawer_menu_btn_img" src="/icon/hamburger.png">
+	</button>
+	<div id="drawer_menu">
+		<h3>機能</h3>
+		<div>
+			<div class="drawer_menu_item">
+				<button class="btn_default" id="chart_btn"><span id="chart_btn_img"></span>チャート作成</button>
+			</div>
+		</div>
+		<h3>レイヤ</h3>
+		<div>
+			<div class="drawer_menu_item">
+				<button id="btn_insert">追加</button>
+				<button id="btn_update">編集</button>
+				<button id="btn_delete">削除</button>
+				<button id="btn_save">保存</button>
+			</div>
+			<div>
+				<div class="drawer_menu_item" id="overlay_tree"></div>
+			</div>
+		</div>
+		<h3>背景地図</h3>
+		<div>
+			<div class="drawer_menu_item" id="baselayer_tree"></div>
+		</div>
+	</div>
+	<div id="chart_div">
+		<canvas id="chart_cvs" width="512" height="512"></canvas>
+	</div>
+	<div th:replace="contents/layer-setting :: layerSettingDialog"></div>
+	<div th:replace="contents/chart-setting :: chartSettingDialog"></div>
+</body>
+</html>

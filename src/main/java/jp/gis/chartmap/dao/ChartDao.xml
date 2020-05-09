@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.gis.chartmap.dao.ChartDao">
+	<select id="selectChartTarget" resultType="jp.gis.chartmap.dto.ChartTargetDto">
+		SELECT
+			t1.table_name,
+			CASE
+				WHEN t2.layer_name IS NULL OR t2.layer_name = '' THEN '未設定'
+				ELSE
+					CASE
+						WHEN t2.parent_node_id IS NULL OR t2.parent_node_id = '' THEN t2.layer_name
+						ELSE t3.layer_name||' - '||t2.layer_name
+					END
+			END AS layer_name,
+			t4.columns
+		FROM
+		(
+			SELECT
+				relname AS table_name
+			FROM
+				pg_stat_user_tables
+			WHERE
+				relname NOT IN ('_layer', 'spatial_ref_sys')
+			UNION ALL
+			SELECT
+				viewname AS table_name
+			FROM
+				pg_views
+			WHERE
+				schemaname = 'public'
+				AND viewname NOT IN ('geography_columns', 'geometry_columns')
+		) t1
+		LEFT JOIN
+			_layer t2
+		ON
+			'chartmap:'||t1.table_name = t2.layer_id
+		LEFT JOIN
+			_layer t3
+		ON
+			t2.parent_node_id = t3.node_id
+		LEFT JOIN
+		(
+			SELECT
+				table_name,
+				ARRAY_TO_STRING(ARRAY_AGG(column_name), ',') AS columns
+			FROM
+			(
+				SELECT
+					table_name,
+					table_schema,
+					ordinal_position,
+					column_name
+				FROM
+					information_schema.columns
+				WHERE
+					table_schema = 'public'
+					AND column_name != 'gid'
+					AND data_type != 'USER-DEFINED'
+				ORDER BY
+					ordinal_position
+			) col
+			GROUP BY
+				table_name
+		) t4
+		ON
+			t1.table_name = t4.table_name
+		ORDER BY
+			t1.table_name
+	</select>
+	<select id="selectChartDataBySum" parameterType="map" resultType="jp.gis.chartmap.dto.ChartDataDto">
+		SELECT
+			${hCol} AS label,
+			sum(${vCol}) AS value
+		FROM
+			${table}
+		GROUP BY
+			${hCol}
+		ORDER BY
+			${hCol}
+	</select>
+	<select id="selectChartDataByAvg" parameterType="map" resultType="jp.gis.chartmap.dto.ChartDataDto">
+		SELECT
+			${hCol} AS label,
+			avg(${vCol}) AS value
+		FROM
+			${table}
+		GROUP BY
+			${hCol}
+		ORDER BY
+			${hCol}
+	</select>
+	<select id="selectChartDataByCtr" parameterType="map" resultType="jp.gis.chartmap.dto.ChartDataDto">
+		SELECT
+			${hCol} AS label,
+			PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY ${vCol}) AS value
+		FROM
+			${table}
+		GROUP BY
+			${hCol}
+		ORDER BY
+			${hCol}
+	</select>
+	<select id="selectChartDataByMax" parameterType="map" resultType="jp.gis.chartmap.dto.ChartDataDto">
+		SELECT
+			${hCol} AS label,
+			max(${vCol}) AS value
+		FROM
+			${table}
+		GROUP BY
+			${hCol}
+		ORDER BY
+			${hCol}
+	</select>
+	<select id="selectChartDataByMin" parameterType="map" resultType="jp.gis.chartmap.dto.ChartDataDto">
+		SELECT
+			${hCol} AS label,
+			min(${vCol}) AS value
+		FROM
+			${table}
+		GROUP BY
+			${hCol}
+		ORDER BY
+			${hCol}
+	</select>
+</mapper>

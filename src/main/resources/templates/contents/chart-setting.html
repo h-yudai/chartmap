@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="chartSettingDialog" th:remove="tag">
+		<div id="chartSettingDialog" style="display:none">
+			<h3>１．データを選択してください。</h3>
+			<div>
+				<div id="chart_setting_target"></div>
+			</div>
+			<h3>２．縦軸の項目を選択してください。</h3>
+			<div>
+				<table>
+					<tr>
+						<td align="right" width="64">カラム：</td>
+						<td><select id="chart_setting_col_v"></select></td>
+					</tr>
+					<tr>
+						<td align="right">ラベル：</td>
+						<td><input type="text" id="chart_setting_label" placeholder="東京"></td>
+					</tr>
+					<tr>
+						<td align="right">単位：</td>
+						<td><input type="text" id="chart_setting_unit" placeholder="円／㎡"></td>
+					</tr>
+				</table>
+			</div>
+			<h3>３．横軸の項目を選択してください。</h3>
+			<div>
+				<table>
+					<tr>
+						<td align="right" width="64">カラム：</td>
+						<td><select id="chart_setting_col_h"></select></td>
+					</tr>
+				</table>
+			</div>
+			<h3>４．集約方法を選択してください。</h3>
+			<div>
+				<table>
+					<tr>
+						<td align="right" width="64">集約方法：</td>
+						<td>
+							<select id="chart_setting_aggregation">
+								<option value="SUM">合計値</option>
+								<option value="AVG">平均値</option>
+								<option value="CTR">中央値</option>
+								<option value="MAX">最大値</option>
+								<option value="MIN">最小値</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<h3>５．タイトルを入力してください。</h3>
+			<div>
+				<table>
+					<tr>
+						<td align="right" width="64">タイトル：</td>
+						<td>
+							<input type="text" id="chart_setting_title" placeholder="地価の推移">
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

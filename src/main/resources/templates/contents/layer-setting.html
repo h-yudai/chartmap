@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="layerSettingDialog" th:remove="tag">
+		<div id="layerSettingDialog" style="display:none">
+			<ul class="tab-group">
+				<li class="tab is-active">レイヤ</li>
+				<li class="tab">フォルダ</li>
+			</ul>
+			<div class="panel-group">
+				<div class="panel is-show">
+					<table class="layer_setting_tbl">
+						<tr>
+							<td width="90" align="right">レイヤID：</td>
+							<td><input type="text" id="layer_id" placeholder="chartmap:xxx"></td>
+						</tr>
+						<tr>
+							<td align="right">レイヤ名：</td>
+							<td><input type="text" id="layer_name" placeholder="東京"></td>
+						</tr>
+						<tr>
+							<td align="right">レイヤ種別：</td>
+							<td>
+								<select id="layer_type">
+									<option value="WMS">WMS</option>
+									<option value="XYZ">XYZ</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">レイヤURL：</td>
+							<td><input type="text" id="layer_url" placeholder="http://xxx/geoserver/chartmap/wms"></td>
+						</tr>
+						<tr>
+							<td align="right">透過度：</td>
+							<td><input type="text" id="layer_opacity" placeholder="0.0〜1.0"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="panel">
+					<table class="layer_setting_tbl">
+						<tr>
+							<td width="90" align="right">フォルダ名：</td>
+							<td><input type="text" id="folder_name" placeholder="行政区域"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

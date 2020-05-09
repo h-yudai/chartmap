@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.gis.chartmap.mapper.LayerMapper">
+  <resultMap id="BaseResultMap" type="jp.gis.chartmap.entity.Layer">
+    <id column="node_id" jdbcType="VARCHAR" property="nodeId" />
+    <result column="node_type" jdbcType="VARCHAR" property="nodeType" />
+    <result column="parent_node_id" jdbcType="VARCHAR" property="parentNodeId" />
+    <result column="layer_id" jdbcType="VARCHAR" property="layerId" />
+    <result column="layer_name" jdbcType="VARCHAR" property="layerName" />
+    <result column="layer_type" jdbcType="VARCHAR" property="layerType" />
+    <result column="layer_url" jdbcType="VARCHAR" property="layerUrl" />
+    <result column="layer_opacity" jdbcType="NUMERIC" property="layerOpacity" />
+    <result column="layer_order" jdbcType="INTEGER" property="layerOrder" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    node_id, node_type, parent_node_id, layer_id, layer_name, layer_type, layer_url, 
+    layer_opacity, layer_order
+  </sql>
+  <select id="selectByExample" parameterType="jp.gis.chartmap.entity.LayerExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from _layer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from _layer
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from _layer
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="jp.gis.chartmap.entity.LayerExample">
+    delete from _layer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jp.gis.chartmap.entity.Layer">
+    insert into _layer (node_id, node_type, parent_node_id, 
+      layer_id, layer_name, layer_type, 
+      layer_url, layer_opacity, layer_order
+      )
+    values (#{nodeId,jdbcType=VARCHAR}, #{nodeType,jdbcType=VARCHAR}, #{parentNodeId,jdbcType=VARCHAR}, 
+      #{layerId,jdbcType=VARCHAR}, #{layerName,jdbcType=VARCHAR}, #{layerType,jdbcType=VARCHAR}, 
+      #{layerUrl,jdbcType=VARCHAR}, #{layerOpacity,jdbcType=NUMERIC}, #{layerOrder,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="jp.gis.chartmap.entity.Layer">
+    insert into _layer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        node_id,
+      </if>
+      <if test="nodeType != null">
+        node_type,
+      </if>
+      <if test="parentNodeId != null">
+        parent_node_id,
+      </if>
+      <if test="layerId != null">
+        layer_id,
+      </if>
+      <if test="layerName != null">
+        layer_name,
+      </if>
+      <if test="layerType != null">
+        layer_type,
+      </if>
+      <if test="layerUrl != null">
+        layer_url,
+      </if>
+      <if test="layerOpacity != null">
+        layer_opacity,
+      </if>
+      <if test="layerOrder != null">
+        layer_order,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeType != null">
+        #{nodeType,jdbcType=VARCHAR},
+      </if>
+      <if test="parentNodeId != null">
+        #{parentNodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="layerId != null">
+        #{layerId,jdbcType=VARCHAR},
+      </if>
+      <if test="layerName != null">
+        #{layerName,jdbcType=VARCHAR},
+      </if>
+      <if test="layerType != null">
+        #{layerType,jdbcType=VARCHAR},
+      </if>
+      <if test="layerUrl != null">
+        #{layerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="layerOpacity != null">
+        #{layerOpacity,jdbcType=NUMERIC},
+      </if>
+      <if test="layerOrder != null">
+        #{layerOrder,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jp.gis.chartmap.entity.LayerExample" resultType="java.lang.Long">
+    select count(*) from _layer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update _layer
+    <set>
+      <if test="record.nodeId != null">
+        node_id = #{record.nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeType != null">
+        node_type = #{record.nodeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentNodeId != null">
+        parent_node_id = #{record.parentNodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.layerId != null">
+        layer_id = #{record.layerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.layerName != null">
+        layer_name = #{record.layerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.layerType != null">
+        layer_type = #{record.layerType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.layerUrl != null">
+        layer_url = #{record.layerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.layerOpacity != null">
+        layer_opacity = #{record.layerOpacity,jdbcType=NUMERIC},
+      </if>
+      <if test="record.layerOrder != null">
+        layer_order = #{record.layerOrder,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update _layer
+    set node_id = #{record.nodeId,jdbcType=VARCHAR},
+      node_type = #{record.nodeType,jdbcType=VARCHAR},
+      parent_node_id = #{record.parentNodeId,jdbcType=VARCHAR},
+      layer_id = #{record.layerId,jdbcType=VARCHAR},
+      layer_name = #{record.layerName,jdbcType=VARCHAR},
+      layer_type = #{record.layerType,jdbcType=VARCHAR},
+      layer_url = #{record.layerUrl,jdbcType=VARCHAR},
+      layer_opacity = #{record.layerOpacity,jdbcType=NUMERIC},
+      layer_order = #{record.layerOrder,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jp.gis.chartmap.entity.Layer">
+    update _layer
+    <set>
+      <if test="nodeType != null">
+        node_type = #{nodeType,jdbcType=VARCHAR},
+      </if>
+      <if test="parentNodeId != null">
+        parent_node_id = #{parentNodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="layerId != null">
+        layer_id = #{layerId,jdbcType=VARCHAR},
+      </if>
+      <if test="layerName != null">
+        layer_name = #{layerName,jdbcType=VARCHAR},
+      </if>
+      <if test="layerType != null">
+        layer_type = #{layerType,jdbcType=VARCHAR},
+      </if>
+      <if test="layerUrl != null">
+        layer_url = #{layerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="layerOpacity != null">
+        layer_opacity = #{layerOpacity,jdbcType=NUMERIC},
+      </if>
+      <if test="layerOrder != null">
+        layer_order = #{layerOrder,jdbcType=INTEGER},
+      </if>
+    </set>
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jp.gis.chartmap.entity.Layer">
+    update _layer
+    set node_type = #{nodeType,jdbcType=VARCHAR},
+      parent_node_id = #{parentNodeId,jdbcType=VARCHAR},
+      layer_id = #{layerId,jdbcType=VARCHAR},
+      layer_name = #{layerName,jdbcType=VARCHAR},
+      layer_type = #{layerType,jdbcType=VARCHAR},
+      layer_url = #{layerUrl,jdbcType=VARCHAR},
+      layer_opacity = #{layerOpacity,jdbcType=NUMERIC},
+      layer_order = #{layerOrder,jdbcType=INTEGER}
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

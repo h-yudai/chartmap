@@ -1,0 +1,136 @@
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+/* 地図 */
+#map {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+/* コピーライト */
+.ol-attribution li {
+	font-size: 10px;
+}
+/* 拡大縮小ボタン */
+.ol-zoom {
+	top: 8px;
+	left: initial;
+	right: 8px;
+}
+.ol-control button {
+	background-color: rgba(0,0,0,.5);
+}
+/* スケールバー */
+.ol-scale-line {
+	transition: all 0.2s;
+	transform: translate(0px);
+	background-color: rgba(0,0,0,.3);
+}
+/* Drawerメニュー */
+#drawer_menu {
+	font-size: 10px;
+	width: 256px;
+	height: 100%;
+	transition: all 0.2s;
+	transform: translate(-256px);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	background-color: #fff;
+	border: 1px solid lightgray;
+	overflow: scroll;
+}
+.drawer_menu_item {
+	margin: 4px;
+}
+#drawer_menu > h3 {
+	font-weight: normal;
+	margin: 2px 2px 0 2px;
+	padding: 4px;
+	color: #fff;
+	background-color: dimgray;
+	cursor: pointer;
+	border: #000 1px solid;
+}
+#drawer_menu > div {
+	margin: 0 2px 0 2px;
+	background: #fff;
+	border: #d3d3d3 1px solid;
+}
+/* Drawerメニュー 開閉ボタン */
+#drawer_menu_btn {
+	margin: 1px;
+	padding: 3px;
+	border-radius: 4px;
+	background-color: rgba(255,255,255,.4);
+	width: 28px;
+	height: 28px;
+	border: none;
+	transition: all 0.2s;
+	transform: translate(0px);
+	position: absolute;
+	top: 8px;
+	left: 10px;
+	cursor: pointer;
+}
+#drawer_menu_btn img {
+	border-radius: 2px;
+	width: 100%;
+	height: 100%;
+}
+/* Drawerメニュー オープン時 */
+#drawer_menu.open {
+	transform: translate(0);
+}
+#drawer_menu_btn.open {
+	transform: translate(256px);
+}
+.ol-scale-line.open {
+	transform: translate(256px);
+}
+/* Drawerメニュー 機能ボタン */
+.btn_default {
+	line-height: 16px;
+	cursor: pointer;
+}
+.btn_default > span {
+	background-size: contain;
+	display: inline-block;
+	margin: 4px 8px 0 0;
+	width: 12px;
+	height: 12px;
+}
+#chart_btn_img {
+	background-image: url('/icon/graph_btn_32px.png');
+}
+/* jQuery UI */
+.ui-dialog-titlebar, .ui-button, .ui-widget {
+	padding: 4px;
+	font-size: 12px;
+	font-weight: normal;
+}
+/* jsTree */
+.jstree-anchor {
+	background-color: initial;
+}
+.jstree-themeicon-custom {
+	background-size: 16px 16px !important;
+}
+.no_checkbox {
+	width: 80px !important;
+	height: 80px !important;
+}
+.no_checkbox > i.jstree-checkbox {
+	display: none;
+}
+.no_checkbox > i.jstree-themeicon {
+	width: 80px !important;
+	height: 80px !important;
+	background-size: 80px 80px !important;
+}
