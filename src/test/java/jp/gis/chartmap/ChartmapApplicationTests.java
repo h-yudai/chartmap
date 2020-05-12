@@ -1,4 +1,4 @@
-package jp.geo.chartmap;
+package jp.gis.chartmap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
