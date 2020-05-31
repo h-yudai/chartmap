@@ -9,29 +9,17 @@ ChartSetting.prototype = {
 			modal: false,
 			title: "設定",
 			width: 550,
+			height: 420,
 			position: {my: "left top", at: "left+258 top", of: "#map"},
 			buttons: {
-				"作成": function() {
+				"新規作成": function() {
 					// 設定値取得
-					var settingParam = {};
-					if($('.jsgrid-selected-row-ext').length != 0) {
-						settingParam.table = $('.jsgrid-selected-row-ext')[0].children[0].innerHTML;
-					}
-					settingParam.vCol = $("#chart_setting_col_v").val();
-					settingParam.hCol = $("#chart_setting_col_h").val();
-					settingParam.agg = $("#chart_setting_aggregation").val();
-
+					var settingParam = self.getSettnigParam();
 					// 入力チェック
-					var isRequiredError = false;
-					if(!settingParam.table) isRequiredError = true;
-					if(!settingParam.vCol) isRequiredError = true;
-					if(!settingParam.hCol) isRequiredError = true;
-					if(!settingParam.agg) isRequiredError = true;
-					if(isRequiredError) {
+					if(self.isRequiredError(settingParam)) {
 						alert("データを選択してください");
 						return;
 					}
-
 					// チャートデータ取得
 					$.ajax({
 						url: host + "/chart/getChartData",
@@ -43,23 +31,42 @@ ChartSetting.prototype = {
 						// チャート生成
 						self.createChart(data);
 						// チャート表示
-						$("#chart_div").dialog({
-							modal: false,
-							title: "チャート",
-							width: 450,
-							height: 540,
-							position: {my: "right top", at: "right top", of: "#map"},
-							buttons: {
-								"画像出力": function() {
-									var canvas = document.getElementById('chart_cvs');
-									var base64 = canvas.toDataURL("image/png");
-									var a = document.createElement('a');
-									a.href = base64
-									a.download = 'chart.png';
-									a.click();
-								}
-							}
-						});
+						self.showChart();
+					}).fail(function(jqXHR, textStatus, errorThrown){
+						alert("チャートデータの取得に失敗しました。");
+					});
+				},
+				"データ追加": function() {
+					// チャートが作成済みの場合のみ実行
+					var isNotCreateDlg = false;
+					try {
+						if(!$('#chart_div').dialog('isOpen')) {
+							isNotCreateDlg = true;
+						}
+					} catch(e) {
+						isNotCreateDlg = true;
+					}
+					if(isNotCreateDlg) {
+						alert("チャートが作成されていません。");
+						return;
+					}
+					// 設定値取得
+					var settingParam = self.getSettnigParam();
+					// 入力チェック
+					if(self.isRequiredError(settingParam)) {
+						alert("データを選択してください");
+						return;
+					}
+					// チャートデータ取得
+					$.ajax({
+						url: host + "/chart/getChartData",
+						type: "GET",
+						dataType: "json",
+						data: settingParam,
+						contentType: "application/json; charset=UTF-8"
+					}).done(function(data, textStatus, jqXHR){
+						// チャート生成
+						self.addChart(data);
 					}).fail(function(jqXHR, textStatus, errorThrown){
 						alert("チャートデータの取得に失敗しました。");
 					});
@@ -69,6 +76,24 @@ ChartSetting.prototype = {
 				self.createGrid();
 			}
 		});
+	},
+	getSettnigParam: function() {
+		var settingParam = {};
+		if($('.jsgrid-selected-row-ext').length != 0) {
+			settingParam.table = $('.jsgrid-selected-row-ext')[0].children[0].innerHTML;
+		}
+		settingParam.vCol = $("#chart_setting_col_v").val();
+		settingParam.hCol = $("#chart_setting_col_h").val();
+		settingParam.agg = $("#chart_setting_aggregation").val();
+		return settingParam;
+	},
+	isRequiredError: function(settingParam) {
+		var isRequiredError = false;
+		if(!settingParam.table) isRequiredError = true;
+		if(!settingParam.vCol) isRequiredError = true;
+		if(!settingParam.hCol) isRequiredError = true;
+		if(!settingParam.agg) isRequiredError = true;
+		return isRequiredError;
 	},
 	createGrid: function() {
 		// 対象データ取得
@@ -161,6 +186,43 @@ ChartSetting.prototype = {
 				title: {
 					display: true,
 					text: $("#chart_setting_title").val()
+				}
+			}
+		});
+	},
+	addChart: function(chartData) {
+		var labels = [];
+		var values = [];
+		for(let i = 0; i < chartData.length; i++) {
+			var entry = chartData[i];
+			labels.push(entry.label);
+			values.push(entry.value);
+		}
+		var dataset = {
+			label: $("#chart_setting_label").val(),
+			backgroundColor: Chart.helpers.color('rgb(99, 255, 132)').alpha(0.5).rgbString(),
+			borderColor: Chart.helpers.color('rgb(99, 255, 132)').alpha(0.5).rgbString(),
+			borderWidth: 1,
+			data: values
+		}
+		chartSetting.chart.data.datasets.push(dataset);
+		chartSetting.chart.update()
+	},
+	showChart: function() {
+		$("#chart_div").dialog({
+			modal: false,
+			title: "チャート",
+			width: 450,
+			height: 540,
+			position: {my: "right top", at: "right top", of: "#map"},
+			buttons: {
+				"画像出力": function() {
+					var canvas = document.getElementById('chart_cvs');
+					var base64 = canvas.toDataURL("image/png");
+					var a = document.createElement('a');
+					a.href = base64
+					a.download = 'chart.png';
+					a.click();
 				}
 			}
 		});

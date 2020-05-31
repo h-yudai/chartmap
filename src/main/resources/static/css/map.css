@@ -123,14 +123,11 @@ body {
 	background-size: 16px 16px !important;
 }
 .no_checkbox {
-	width: 80px !important;
-	height: 80px !important;
+	height: auto !important;
 }
 .no_checkbox > i.jstree-checkbox {
 	display: none;
 }
-.no_checkbox > i.jstree-themeicon {
-	width: 80px !important;
-	height: 80px !important;
-	background-size: 80px 80px !important;
+.no_checkbox > img {
+	vertical-align: middle;
 }

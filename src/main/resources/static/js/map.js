@@ -48,6 +48,12 @@ function initLayer() {
 		type: "GET",
 		dataType: "json"
 	}).done(function(data, textStatus, jqXHR){
+		// レイヤ数分ループ
+		for(let i = 0; i < data.length; i++) {
+			// レイヤ生成
+			createLayer(data[i]);
+		}
+		// レイヤツリー生成
 		createTree("baselayer_tree", data);
 	}).fail(function(jqXHR, textStatus, errorThrown){
 		alert("背景地図レイヤの初期化に失敗しました。");
@@ -58,6 +64,12 @@ function initLayer() {
 		type: "GET",
 		dataType: "json"
 	}).done(function(data, textStatus, jqXHR){
+		// レイヤ数分ループ
+		for(let i = 0; i < data.length; i++) {
+			// レイヤ生成
+			createLayer(data[i]);
+		}
+		// レイヤツリー生成
 		createTree("overlay_tree", data);
 	}).fail(function(jqXHR, textStatus, errorThrown){
 		alert("オーバーレイレイヤの初期化に失敗しました。");
@@ -65,35 +77,40 @@ function initLayer() {
 }
 
 /**
- * レイヤツリー生成
+ * レイヤ生成
  */
-function createTree(domId, data) {
-	// レイヤ数分ループ
-	for(let j = 0; j < data.length; j++) {
-		for(let i = 0; i < data[j].children.length; i++) {
-			var node = data[j].children[i];
-			// レイヤ生成
-			var obj = new Layer(node);
+function createLayer(data) {
+	if(data.a_attr) {
+		var obj = new Layer(data);
+		if(obj.layer) {
 			// 地図に追加
 			map.addLayer(obj.layer);
 			// グローバル変数で保持
 			layers.push(obj);
 		}
 	}
+	// 子要素に対して再帰
+	if(data.children) {
+		for(let i = 0; i < data.children.length; i++) {
+			createLayer(data.children[i]);
+		}
+	}
+}
+
+/**
+ * レイヤツリー生成
+ */
+function createTree(domId, data) {
 	// レイヤツリー生成
 	$("#" + domId).jstree({
 		"core": {"data": data, "check_callback": true},
 		"types": {
 			"map": {"icon": "/icon/map_32px.png"},
-			"leaf": {"icon": "/icon/layer_32px.png"},
-			// TODO:修正
-//			"legend": {
-//				"icon": "http://localhost:8081/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&LEGEND_OPTIONS=fontName:Serif;fontAntiAliasing:true;bgColor:0xf2f2f2&WIDTH=20&HEIGHT=20&LAYER=chartmap:disaster_shinsui_tokyo"
-//			}
+			"leaf": {"icon": "/icon/layer_32px.png"}
 		},
 		"checkbox": {"keep_selected_style": false},
 		"plugins": ["wholerow", "themes", "checkbox", "changed", "types", "contextmenu", "dnd"]
-	}).on("changed.jstree", function (e, data) {
+	}).on("changed.jstree", function(e, data) {
 		// レイヤ表示切り替え
 		var selected = data.changed.selected;
 		var deselected = data.changed.deselected;
@@ -103,9 +120,23 @@ function createTree(domId, data) {
 		for(let i = 0; i < deselected.length; i++) {
 			changeLayer(deselected[i], false);
 		}
-	}).on('ready.jstree', function () {
-		// TODO:修正
-//		$("#overlay_tree").jstree().get_node("overlay_002_001_001").a_attr["class"] = "no_checkbox";
+	}).on('open_node.jstree', function() {
+		// 凡例設定
+		var logendNodes = $("[id^=legend_]");
+		logendNodes.addClass("no_checkbox");
+		for(let i = 0; i < logendNodes.length; i++) {
+			var imgNode = logendNodes[i].lastChild.lastChild;
+			if(imgNode && imgNode.style) {
+				var bgImg = imgNode.style["background-image"]
+				if(bgImg) {
+					imgNode.remove();
+					var legendUrl = bgImg.split('"')[1];
+					var imgTag = document.createElement("img");
+					imgTag.setAttribute("src", legendUrl);
+					logendNodes[i].lastChild.appendChild(imgTag);
+				}
+			}
+		}
 	});
 }
 
@@ -246,6 +277,10 @@ function treeNodeSave() {
  * レイヤツリーノードのパラメータ取得
  */
 function getNodeParam(node, parentNodeId) {
+	// 凡例は除外
+	if(node.id.indexOf("legend_") === 0){
+		return;
+	}
 	// パラメータ取得
 	var param = {};
 	param.nodeId = node.id;
