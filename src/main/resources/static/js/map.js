@@ -145,6 +145,7 @@ function createTree(domId, data) {
  */
 function initButton() {
 	// アイコン
+	$("#btn_chart").button({icons: {primary: "ui-icon-calculator"}});
 	$("#btn_insert").button({icons: {primary: "ui-icon-plus"}});
 	$("#btn_update").button({icons: {primary: "ui-icon-pencil"}});
 	$("#btn_delete").button({icons: {primary: "ui-icon-trash"}});
@@ -170,7 +171,7 @@ function initButton() {
 		treeNodeSave();
 	});
 	// チャート作成ボタンクリックイベント
-	$('#chart_btn').click(function(){
+	$('#btn_chart').click(function(){
 		chartSetting.showDialog();
 	});
 	// Drawerメニューヘッダークリックイベント

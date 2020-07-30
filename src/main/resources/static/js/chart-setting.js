@@ -9,7 +9,7 @@ ChartSetting.prototype = {
 			modal: false,
 			title: "設定",
 			width: 550,
-			height: 420,
+//			height: 420,
 			position: {my: "left top", at: "left+258 top", of: "#map"},
 			buttons: {
 				"新規作成": function() {
